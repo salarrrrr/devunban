@@ -1,12 +1,14 @@
 import logging
 import asyncio
+import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import InlineKeyboardButton
 
-# --- الإعدادات (ضع توكن بوتك هنا) ---
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE" 
+# --- الإعدادات ---
+# ضع التوكن الخاص بك هنا مباشرة
+BOT_TOKEN = "8650385840:AAGVHWVbQ0MzirtA_l6-S83HNKL1O7Jrk2g" 
 CHANNELS_TO_CHECK = ["@ddev8"]
 YOUTUBE_URL = "https://youtube.com/@devinstagram?si=e9YNvnDylP2wC4XL"
 TELEGRAM_URL = "https://t.me/ddev8"
@@ -25,7 +27,7 @@ async def is_subscribed(user_id: int):
             return False
     return False
 
-# --- لوحات المفاتيح ---
+# --- لوحات المفاتيح (Keyboards) ---
 def get_subscription_keyboard():
     builder = InlineKeyboardBuilder()
     builder.row(InlineKeyboardButton(text="Subscribe to Telegram", url=TELEGRAM_URL))
@@ -44,36 +46,34 @@ def get_language_keyboard():
 def get_main_keyboard(lang):
     builder = InlineKeyboardBuilder()
     if lang == "ar":
-        # الأزرار بالعربي
         builder.row(InlineKeyboardButton(text="الإيميلات", callback_data="emails"))
         builder.row(InlineKeyboardButton(text="الرسالة", callback_data="msg_ar"))
     else:
-        # الأزرار بالإنجليزي
         builder.row(InlineKeyboardButton(text="Emails", callback_data="emails"))
         builder.row(InlineKeyboardButton(text="Message", callback_data="msg_en"))
     return builder.as_markup()
 
-# --- معالجة الأوامر ---
+# --- Handlers ---
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     if await is_subscribed(message.from_user.id):
         await message.answer("Please choose your language / الرجاء اختيار اللغة:", reply_markup=get_language_keyboard())
     else:
-        await message.answer("يجب الاشتراك في القناة أولاً لاستخدام البوت.\nYou must subscribe to the channel first.", reply_markup=get_subscription_keyboard())
+        await message.answer("عذراً، يجب عليك الاشتراك في القناة أولاً.\nTo use this bot, you must subscribe to our channels first.", reply_markup=get_subscription_keyboard())
 
 @dp.callback_query(F.data == "verify_sub")
 async def verify_sub_handler(callback: types.CallbackQuery):
     if await is_subscribed(callback.from_user.id):
-        await callback.message.edit_text("تم التحقق بنجاح! اختر اللغة:\nSuccess! Choose language:", reply_markup=get_language_keyboard())
+        await callback.message.edit_text("Success! Choose language / تم التحقق! اختر اللغة:", reply_markup=get_language_keyboard())
     else:
         await callback.answer("لم تشترك بعد! / Not subscribed yet!", show_alert=True)
 
 @dp.callback_query(F.data.startswith("lang_"))
 async def set_language(callback: types.CallbackQuery):
-    chosen_lang = callback.data.split("_")[1]
-    text = "أهلاً بك! اختر أحد الخيارات:" if chosen_lang == "ar" else "Welcome! Choose an option:"
-    await callback.message.edit_text(text, reply_markup=get_main_keyboard(chosen_lang))
+    lang = callback.data.split("_")[1]
+    text = "أهلاً بك! اختر أحد الخيارات:" if lang == "ar" else "Welcome! Choose an option:"
+    await callback.message.edit_text(text, reply_markup=get_main_keyboard(lang))
 
 @dp.callback_query(F.data == "emails")
 async def show_emails(callback: types.CallbackQuery):
@@ -99,11 +99,11 @@ async def show_msg_en(callback: types.CallbackQuery):
         "• A copy of my government-issued identification (such as passport or national ID card)\n"
         "• Any other details needed to confirm that I am the legitimate owner of the account\n"
         "I have been accessing and using this account consistently from my usual devices and location in Amman, Jordan, without any previous issues.\n"
-        "Thank you sincerely for taking the time to review my case. I truly value the Instagram community and would be extremely grateful if you could restore access to my account.\n\n"
+        "Thank you sincerely for taking the time to review my case. I truly value the Instagram community and would be extremely grateful if you could restore access to my account at your earliest convenience.\n\n"
         "Best regards,\n"
         "[Full Name]\n"
-        "Email: [Your Email]\n"
-        "Phone: [Your Phone]"
+        "Email address associated with the account: [Email]\n"
+        "Phone number (if associated): [Phone Number]"
     )
     await callback.message.answer(full_msg_en)
     await callback.answer()
@@ -125,11 +125,14 @@ async def show_msg_ar(callback: types.CallbackQuery):
     await callback.message.answer(full_msg_ar)
     await callback.answer()
 
-# --- التشغيل ---
+# --- Main ---
 async def main():
     logging.basicConfig(level=logging.INFO)
-    print("--- Bot is Running Successfully ---")
+    print("--- البوت شغال الآن وبانتظار الأوامر ---")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        pass
