@@ -68,10 +68,18 @@ async def verify_sub_handler(callback: types.CallbackQuery):
 
 @dp.callback_query(F.data.startswith("lang_"))
 async def set_language(callback: types.CallbackQuery):
+    # نسحب اللغة المختارة (ar أو en)
     lang = callback.data.split("_")[1]
-    text = "Welcome! Choose an option:" if lang == "en" else "أهلاً بك! اختر أحد الخيارات:"
+    
+    # تحديد نص الرسالة بناءً على اللغة
+    if lang == "ar":
+        text = "أهلاً بك! اختر أحد الخيارات:"
+    else:
+        text = "Welcome! Choose an option:"
+        
+    # التعديل هنا: نمرر متغير lang لدالة get_main_keyboard
     await callback.message.edit_text(text, reply_markup=get_main_keyboard(lang))
-
+    
 @dp.callback_query(F.data == "emails")
 async def show_emails(callback: types.CallbackQuery):
     emails_text = "security@mail.instagram.com\nappeals@instagram.com"
