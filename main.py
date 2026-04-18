@@ -1,11 +1,13 @@
 import logging
 import asyncio
+import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import InlineKeyboardButton
 
 # --- Configuration ---
+# ملاحظة للمطور: يفضل استخدامه كـ Environment Variable في Render
 BOT_TOKEN = "8650385840:AAGVHWVbQ0MzirtA_l6-S83HNKL1O7Jrk2g" 
 CHANNELS_TO_CHECK = ["@ddev8"]
 YOUTUBE_URL = "https://youtube.com/@devinstagram?si=e9YNvnDylP2wC4XL"
@@ -44,11 +46,11 @@ def get_language_keyboard():
 def get_main_keyboard(lang):
     builder = InlineKeyboardBuilder()
     if lang == "ar":
-        builder.row(InlineKeyboardButton(text="Emails :", callback_data="emails"))
-        builder.row(InlineKeyboardButton(text="Massage :", callback_data="msg_ar"))
+        builder.row(InlineKeyboardButton(text="الايميلات :", callback_data="emails"))
+        builder.row(InlineKeyboardButton(text="الرسالة :", callback_data="msg_ar"))
     else:
         builder.row(InlineKeyboardButton(text="Emails :", callback_data="emails"))
-        builder.row(InlineKeyboardButton(text="Massage :", callback_data="msg_en"))
+        builder.row(InlineKeyboardButton(text="Message :", callback_data="msg_en"))
     return builder.as_markup()
 
 # --- Handlers ---
@@ -68,18 +70,11 @@ async def verify_sub_handler(callback: types.CallbackQuery):
 
 @dp.callback_query(F.data.startswith("lang_"))
 async def set_language(callback: types.CallbackQuery):
-    # نسحب اللغة المختارة (ar أو en)
     lang = callback.data.split("_")[1]
-    
-    # تحديد نص الرسالة بناءً على اللغة
-    if lang == "ar":
-        text = "أهلاً بك! اختر أحد الخيارات:"
-    else:
-        text = "Welcome! Choose an option:"
-        
-    # التعديل هنا: نمرر متغير lang لدالة get_main_keyboard
+    text = "Welcome! Choose an option:" if lang == "en" else "أهلاً بك! اختر أحد الخيارات:"
+    # هنا التعديل تم تمرير lang بنجاح
     await callback.message.edit_text(text, reply_markup=get_main_keyboard(lang))
-    
+
 @dp.callback_query(F.data == "emails")
 async def show_emails(callback: types.CallbackQuery):
     emails_text = "security@mail.instagram.com\nappeals@instagram.com"
