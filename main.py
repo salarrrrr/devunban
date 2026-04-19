@@ -145,6 +145,8 @@ async def show_msg_ar(callback: types.CallbackQuery):
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("--- Bot is Running with Paid Service Feature ---")
+    # Delete any active webhook before starting long-polling
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
