@@ -1,17 +1,16 @@
 import logging
 import asyncio
-import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import InlineKeyboardButton
 
-# --- الإعدادات ---
-# ضع التوكن الخاص بك هنا مباشرة
+# --- الإعدادات (ضع توكن بوتك هنا) ---
 BOT_TOKEN = "8650385840:AAGVHWVbQ0MzirtA_l6-S83HNKL1O7Jrk2g" 
 CHANNELS_TO_CHECK = ["@ddev8"]
 YOUTUBE_URL = "https://youtube.com/@devinstagram?si=e9YNvnDylP2wC4XL"
 TELEGRAM_URL = "https://t.me/ddev8"
+SUPPORT_URL = "https://t.me/iidevv"
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -48,9 +47,17 @@ def get_main_keyboard(lang):
     if lang == "ar":
         builder.row(InlineKeyboardButton(text="الإيميلات", callback_data="emails"))
         builder.row(InlineKeyboardButton(text="الرسالة", callback_data="msg_ar"))
+        builder.row(InlineKeyboardButton(text="💰 الفك المدفوع", callback_data="paid_service"))
     else:
         builder.row(InlineKeyboardButton(text="Emails", callback_data="emails"))
         builder.row(InlineKeyboardButton(text="Message", callback_data="msg_en"))
+        builder.row(InlineKeyboardButton(text="💰 Paid Service", callback_data="paid_service"))
+    return builder.as_markup()
+
+def get_support_keyboard(lang):
+    builder = InlineKeyboardBuilder()
+    btn_text = "تواصل معي الآن" if lang == "ar" else "Contact Me Now"
+    builder.row(InlineKeyboardButton(text=btn_text, url=SUPPORT_URL))
     return builder.as_markup()
 
 # --- Handlers ---
@@ -60,7 +67,7 @@ async def cmd_start(message: types.Message):
     if await is_subscribed(message.from_user.id):
         await message.answer("Please choose your language / الرجاء اختيار اللغة:", reply_markup=get_language_keyboard())
     else:
-        await message.answer("عذراً، يجب عليك الاشتراك في القناة أولاً.\nTo use this bot, you must subscribe to our channels first.", reply_markup=get_subscription_keyboard())
+        await message.answer("يجب الاشتراك في قنواتنا أولاً لاستخدام البوت.\nYou must subscribe to our channels first.", reply_markup=get_subscription_keyboard())
 
 @dp.callback_query(F.data == "verify_sub")
 async def verify_sub_handler(callback: types.CallbackQuery):
@@ -75,13 +82,22 @@ async def set_language(callback: types.CallbackQuery):
     text = "أهلاً بك! اختر أحد الخيارات:" if lang == "ar" else "Welcome! Choose an option:"
     await callback.message.edit_text(text, reply_markup=get_main_keyboard(lang))
 
+@dp.callback_query(F.data == "paid_service")
+async def paid_service_handler(callback: types.CallbackQuery):
+    ad_text = (
+        "🔥 **فك باند حسابات أنستقرام مدفوع**\n\n"
+        "✅ جميع انواع الباند\n"
+        "🚀 ضمان فك الباند بأسرع وقت\n"
+        "💸 أسعار رخيصه ومناسبة"
+    )
+    # نحدد لغة زر التواصل بناءً على آخر رسالة
+    lang = "ar" if "أهلاً" in callback.message.text else "en"
+    await callback.message.answer(ad_text, reply_markup=get_support_keyboard(lang), parse_mode="Markdown")
+    await callback.answer()
+
 @dp.callback_query(F.data == "emails")
 async def show_emails(callback: types.CallbackQuery):
-    emails_text = (
-        "security@mail.instagram.com\n"
-        "appeals@instagram.com\n"
-        "support@instagram.com"
-    )
+    emails_text = "security@mail.instagram.com\nappeals@instagram.com\nsupport@instagram.com"
     await callback.message.answer(emails_text)
     await callback.answer()
 
@@ -98,8 +114,7 @@ async def show_msg_en(callback: types.CallbackQuery):
         "• A clear video selfie for identity confirmation\n"
         "• A copy of my government-issued identification (such as passport or national ID card)\n"
         "• Any other details needed to confirm that I am the legitimate owner of the account\n"
-        "I have been accessing and using this account consistently from my usual devices and location in Amman, Jordan, without any previous issues.\n"
-        "Thank you sincerely for taking the time to review my case. I truly value the Instagram community and would be extremely grateful if you could restore access to my account at your earliest convenience.\n\n"
+        "I have been accessing and using this account consistently from my usual devices and location in Amman, Jordan, without any previous issues. Thank you sincerely for taking the time to review my case. I truly value the Instagram community and would be extremely grateful if you could restore access to my account at your earliest convenience.\n\n"
         "Best regards,\n"
         "[Full Name]\n"
         "Email address associated with the account: [Email]\n"
@@ -115,7 +130,7 @@ async def show_msg_ar(callback: types.CallbackQuery):
         "فريق دعم إنستغرام / ميتا المحترمين،\n"
         "اسمي الكامل: [اكتب اسمك كما في الهوية]. أراسلكم لاستئناف قرار تعطيل حسابي.\n"
         "لقد اكتشفت مؤخراً تعطيل حسابي، وأنا متأكد أنني ملتزم بجميع القوانين ولم أنتهك معايير المجتمع. هذا الحساب يحتوي على ذكريات شخصية وصور تهمنا جداً.\n"
-        "أنا على استعداد لتقديم كافة الإثباتات المطلوبة لتأكيد هويتي، بما في ذلك فيديو سيلفي وصورة الهوية الشخصية.\n"
+        "أنا على استعداد لتقديم كافة الإثباتات المطلوبة لتأكيد هويتي، بما في ذلك فيديو سيلفي وصورة الهوية الشخصية (جواز سفر أو بطاقة شخصية).\n"
         "أستخدم هذا الحساب من أجهزتي المعتادة في عمان، الأردن، ولم أواجه أي مشاكل سابقاً. أرجو مراجعة طلبي وإعادة الحساب في أقرب وقت.\n\n"
         "مع خالص التقدير،\n"
         "[اسمك الكامل]\n"
@@ -128,7 +143,7 @@ async def show_msg_ar(callback: types.CallbackQuery):
 # --- Main ---
 async def main():
     logging.basicConfig(level=logging.INFO)
-    print("--- البوت شغال الآن وبانتظار الأوامر ---")
+    print("--- Bot is Running with Paid Service Feature ---")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
