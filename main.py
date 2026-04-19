@@ -1,3 +1,4 @@
+import os
 import logging
 import asyncio
 from aiogram import Bot, Dispatcher, types, F
@@ -6,7 +7,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import InlineKeyboardButton
 
 # --- الإعدادات (ضع توكن بوتك هنا) ---
-BOT_TOKEN = "8650385840:AAGVHWVbQ0MzirtA_l6-S83HNKL1O7Jrk2g" 
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "8650385840:AAGVHWVbQ0MzirtA_l6-S83HNKL1O7Jrk2g")
 CHANNELS_TO_CHECK = ["@ddev8"]
 YOUTUBE_URL = "https://youtube.com/@devinstagram?si=e9YNvnDylP2wC4XL"
 TELEGRAM_URL = "https://t.me/ddev8"
@@ -110,7 +111,7 @@ async def show_msg_en(callback: types.CallbackQuery):
         "My name is [Full Name exactly as in Passport/ID]. I am writing to respectfully appeal the decision to disable my Instagram account.\n"
         "I recently discovered that my account has been disabled when I attempted to log in. I was very surprised by this action because I have always used Instagram responsibly and in full compliance with the Community Guidelines and Terms of Service. To the best of my knowledge, I have not posted any content that violates your policies, nor have I engaged in any prohibited activities such as spam, harassment, or other violations.\n"
         "This account is very important to me. It contains many years of personal memories, photos, videos, and connections with friends and family. Losing access to it has caused me significant inconvenience, and I kindly request that your team perform a thorough manual review of the account to reconsider the disablement decision.\n"
-        "I understand that automated systems can sometimes flag accounts in error, and I sincerely believe this may be the case here. I am fully committed to continuing to follow all of Instagram’s rules and guidelines if my account is reinstated. I am also ready and willing to provide any additional verification or information that may be required, including:\n"
+        "I understand that automated systems can sometimes flag accounts in error, and I sincerely believe this may be the case here. I am fully committed to continuing to follow all of Instagram's rules and guidelines if my account is reinstated. I am also ready and willing to provide any additional verification or information that may be required, including:\n"
         "• A clear video selfie for identity confirmation\n"
         "• A copy of my government-issued identification (such as passport or national ID card)\n"
         "• Any other details needed to confirm that I am the legitimate owner of the account\n"
