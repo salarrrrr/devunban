@@ -1,6 +1,7 @@
 import os
 import logging
 import asyncio
+from aiohttp import web
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -91,7 +92,6 @@ async def paid_service_handler(callback: types.CallbackQuery):
         "🚀 ضمان فك الباند بأسرع وقت\n"
         "💸 أسعار رخيصه ومناسبة"
     )
-    # نحدد لغة زر التواصل بناءً على آخر رسالة
     lang = "ar" if "أهلاً" in callback.message.text else "en"
     await callback.message.answer(ad_text, reply_markup=get_support_keyboard(lang), parse_mode="Markdown")
     await callback.answer()
@@ -141,10 +141,27 @@ async def show_msg_ar(callback: types.CallbackQuery):
     await callback.message.answer(full_msg_ar)
     await callback.answer()
 
+# --- Minimal health check HTTP server ---
+async def health_handler(request):
+    return web.Response(text="OK", status=200)
+
+async def run_health_server():
+    port = int(os.environ.get("PORT", "8000"))
+    app = web.Application()
+    app.router.add_get("/", health_handler)
+    app.router.add_get("/health", health_handler)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+    logging.info(f"Health server running on port {port}")
+
 # --- Main ---
 async def main():
     logging.basicConfig(level=logging.INFO)
     print("--- Bot is Running with Paid Service Feature ---")
+    # Start health check HTTP server concurrently
+    await run_health_server()
     # Delete any active webhook before starting long-polling
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
