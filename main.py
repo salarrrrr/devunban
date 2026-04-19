@@ -105,21 +105,23 @@ async def show_emails(callback: types.CallbackQuery):
 @dp.callback_query(F.data == "msg_en")
 async def show_msg_en(callback: types.CallbackQuery):
     full_msg_en = (
-        "Subject: Request for Manual Review and Reinstatement of My Disabled Instagram Account\n\n"
-        "Dear Instagram / Meta Support Team,\n"
-        "I hope this message finds you well.\n"
-        "My name is [Full Name exactly as in Passport/ID]. I am writing to respectfully appeal the decision to disable my Instagram account.\n"
-        "I recently discovered that my account has been disabled when I attempted to log in. I was very surprised by this action because I have always used Instagram responsibly and in full compliance with the Community Guidelines and Terms of Service. To the best of my knowledge, I have not posted any content that violates your policies, nor have I engaged in any prohibited activities such as spam, harassment, or other violations.\n"
-        "This account is very important to me. It contains many years of personal memories, photos, videos, and connections with friends and family. Losing access to it has caused me significant inconvenience, and I kindly request that your team perform a thorough manual review of the account to reconsider the disablement decision.\n"
-        "I understand that automated systems can sometimes flag accounts in error, and I sincerely believe this may be the case here. I am fully committed to continuing to follow all of Instagram's rules and guidelines if my account is reinstated. I am also ready and willing to provide any additional verification or information that may be required, including:\n"
-        "• A clear video selfie for identity confirmation\n"
-        "• A copy of my government-issued identification (such as passport or national ID card)\n"
-        "• Any other details needed to confirm that I am the legitimate owner of the account\n"
-        "I have been accessing and using this account consistently from my usual devices and location in Amman, Jordan, without any previous issues. Thank you sincerely for taking the time to review my case. I truly value the Instagram community and would be extremely grateful if you could restore access to my account at your earliest convenience.\n\n"
-        "Best regards,\n"
-        "[Full Name]\n"
-        "Email address associated with the account: [Email]\n"
-        "Phone number (if associated): [Phone Number]"
+       "Dear Instagram / Meta Support Team,\n\n"
+"I hope this message finds you well.\n\n"
+"My name is [Full Name exactly as in Passport/ID]. I am writing to respectfully appeal the decision to disable my Instagram account.\n\n"
+"I recently discovered that my account had been disabled when I attempted to log in. This came as a surprise, as I have always used Instagram responsibly and in full compliance with the Community Guidelines and Terms of Service. To the best of my knowledge, I have not posted any content that violates your policies, nor have I engaged in prohibited activities such as spam, impersonation, harassment, or any form of misuse.\n\n"
+"This account is very important to me. It contains years of personal memories, including photos, videos, and meaningful connections with friends and family. Losing access has caused significant inconvenience, and I kindly ask that your team conduct a thorough manual review of the account and reconsider the disablement decision.\n\n"
+"I understand that automated systems may sometimes flag accounts incorrectly, and I believe this could be one of those cases. I want to assure you that I remain fully committed to following all of Instagram’s rules and guidelines.\n\n"
+"To assist with the verification process, I am ready and willing to provide any required information, including:\n"
+"• A clear video selfie for identity confirmation\n"
+"• A copy of my government-issued identification (passport or national ID)\n"
+"• Any additional details needed to confirm ownership of the account\n\n"
+"The account has been consistently accessed from my usual devices and normal usage patterns, without any prior issues.\n\n"
+"Thank you sincerely for your time and consideration. I truly value the Instagram community and would greatly appreciate your assistance in restoring access to my account as soon as possible.\n\n"
+"Best regards,\n"
+"[Full Name]\n"
+"Username: [Your Username]\n"
+"Email address associated with the account: [Email]\n"
+"Phone number (if associated): [Phone Number]"
     )
     await callback.message.answer(full_msg_en)
     await callback.answer()
@@ -127,16 +129,18 @@ async def show_msg_en(callback: types.CallbackQuery):
 @dp.callback_query(F.data == "msg_ar")
 async def show_msg_ar(callback: types.CallbackQuery):
     full_msg_ar = (
-        "الموضوع: طلب مراجعة يدوية واستعادة حسابي المعطل على إنستغرام\n\n"
-        "فريق دعم إنستغرام / ميتا المحترمين،\n"
-        "اسمي الكامل: [اكتب اسمك كما في الهوية]. أراسلكم لاستئناف قرار تعطيل حسابي.\n"
-        "لقد اكتشفت مؤخراً تعطيل حسابي، وأنا متأكد أنني ملتزم بجميع القوانين ولم أنتهك معايير المجتمع. هذا الحساب يحتوي على ذكريات شخصية وصور تهمنا جداً.\n"
-        "أنا على استعداد لتقديم كافة الإثباتات المطلوبة لتأكيد هويتي، بما في ذلك فيديو سيلفي وصورة الهوية الشخصية (جواز سفر أو بطاقة شخصية).\n"
-        "أستخدم هذا الحساب من أجهزتي المعتادة في عمان، الأردن، ولم أواجه أي مشاكل سابقاً. أرجو مراجعة طلبي وإعادة الحساب في أقرب وقت.\n\n"
-        "مع خالص التقدير،\n"
-        "[اسمك الكامل]\n"
-        "الإيميل المرتبط بالحساب: [إيميل الحساب]\n"
-        "رقم الهاتف: [رقم الهاتف]"
+       فريق دعم إنستقرام المحترم،\n\n"
+"تحية طيبة وبعد،\n\n"
+"أتقدم إليكم بهذا الطلب راجيًا مراجعة حالة حساب تم تعطيله مؤخرًا، حيث أعتقد أن هذا الإجراء قد تم عن طريق الخطأ أو نتيجة سوء فهم. لقد تم استخدام الحساب دائمًا بما يتوافق مع إرشادات مجتمع إنستقرام وشروط الاستخدام، ولم يتم ارتكاب أي مخالفات بشكل متعمد.\n\n"
+"طوال فترة استخدام الحساب، كان النشاط طبيعيًا وحقيقيًا، ولم يتم استخدام أي وسائل غير مشروعة مثل الرسائل المزعجة (Spam) أو الأنظمة الآلية أو انتحال الشخصية أو أي سلوك مضلل أو ضار. كما أن جميع المحتويات التي تم نشرها كانت ملتزمة بالسياسات العامة، وخالية من أي مواد مخالفة أو غير لائقة.\n\n"
+"قد يكون التعطيل ناتجًا عن نظام آلي أو تفسير خاطئ لبعض الأنشطة، ولذلك أرجو منكم التكرم بإجراء مراجعة يدوية دقيقة للحساب للتأكد من الوضع بشكل عادل. أنا أقدّر جهودكم في الحفاظ على بيئة آمنة وموثوقة، وأحرص بشكل كامل على الالتزام بجميع القوانين والسياسات الخاصة بالمنصة.\n\n"
+"في حال وجود أي ملاحظات أو أسباب محددة أدت إلى تعطيل الحساب، أرجو تزويدي بها حتى أتمكن من فهم المشكلة ومعالجتها بالشكل الصحيح. كما أنني مستعد للتعاون وتقديم أي معلومات إضافية قد تساعد في تسهيل عملية المراجعة.\n\n"
+"بناءً على ما سبق، أرجو منكم إعادة النظر في القرار وإعادة تفعيل الحساب في أقرب وقت ممكن.\n\n"
+"شاكرين لكم وقتكم وتفهمكم ودعمكم.\n\n"
+"وتفضلوا بقبول فائق الاحترام والتقدير،\n\n"
+"مستخدم مهتم\n\n"
+"اسم المستخدم: [your_username]\n"
+"البريد الإلكتروني: [your_email@example.com]"
     )
     await callback.message.answer(full_msg_ar)
     await callback.answer()
